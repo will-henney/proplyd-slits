@@ -92,13 +92,24 @@ Pscen = 0.5*(Ps[1:]+Ps[:-1])
 
 #lib.plotter(Ps,Br,xlow=-20,ylow=-20,xlab='xslit(arcseconds)',ylab='yslit(arcseconds)')
 
-plt.plot(Pscen,Br)
-plt.axis([-20,30,-1e-3,0.02]) #Adjusting axes
-plt.xlabel('xslit(arcseconds)')
-plt.ylabel('yslit(arcseconds)')
-plt.title('Histograma LV1(HD)') #Maybe I can in the future send data to file and then plot with another program
-plt.savefig('Grafica.png')
-plt.clf()
+#plt.plot(Pscen,Br)
+#plt.axis([-20,30,-1e-3,0.02]) #Adjusting axes
+#plt.xlabel('xslit(arcseconds)')
+#plt.ylabel('yslit(arcseconds)')
+#plt.title('Histograma LV1(HD)') #Maybe I can in the future send data to file and then plot with another program
+#plt.savefig('Grafica.png')
+#plt.clf()
+
+#Well, let me try to save the Data in file.
+
+outdata = open('output.dat','w')
+
+outdata.write('#Slit centered in proplyd '+ cmdargs.proplyd + ' with angle ' + str(cmdargs.theta)+'\n')
+outdata.write('#Position'+'\t'+'Brightness')
+for i in range(0,Br.size):
+    outdata.write( str( Ps[i] )+'\t'+str( Br[i] ) )
+
+outdata.close()
 #repeat everything with a perpendicular slit
 #thsLV1_n = thsLV1 + 0.5*np.pi
 #print thsLV1_n*180/np.pi

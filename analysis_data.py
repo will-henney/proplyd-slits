@@ -105,9 +105,9 @@ Pscen = 0.5*(Ps[1:]+Ps[:-1])
 outdata = open('output.dat','w')
 
 outdata.write('#Slit centered in proplyd '+ cmdargs.proplyd + ' with angle ' + str(cmdargs.theta)+'\n')
-outdata.write('#Position'+'\t'+'Brightness')
+outdata.write('#Position'+'\t'+'Brightness'+'\n')
 for i in range(0,Br.size):
-    outdata.write( str( Ps[i] )+'\t'+str( Br[i] ) )
+    outdata.write( str( Ps[i] )+'\t'+str( Br[i] )+'\n' )
 
 outdata.close()
 #repeat everything with a perpendicular slit

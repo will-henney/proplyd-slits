@@ -115,14 +115,24 @@ def XY(header):
     try:
         dx = header['CD1_1']*3600.
         dy = header['CD2_2']*3600.
+         
     except KeyError:
         # otherwise try to use the CDELT1 keyword instead
         dx = header['CDELT1']*3600.
         dy = header['CDELT2']*3600.
-        
-        
-    X = (XP - xp0)*dx  
-    Y = (YP - yp0)*dy  
+  
+    # we must check if image has a rotation
+    try:
+        dxdy= header['CD1_2']*3600.
+        dydx= header['CD2_1']*3600.
+
+    # if the keywords CD1_2 and CD2_1 don't exist, means that there is no rotation in image
+    except KeyError:
+        dxdy = 0.
+        dydx = 0.
+
+    X = (XP - xp0)*dx + (YP-yp0)*dxdy
+    Y = (YP - yp0)*dy + (XP-xp0)*dydx 
 
     return X,Y,dx,dy
 

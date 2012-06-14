@@ -85,6 +85,16 @@ def inputs(path,Filename):
     f=pyfits.open(path+Filename)
     headers=f[0].header
     data=f[0].data
+    #if the relevant information is not in f[0], the HST image has these data in f[1], we need to switch to the next element somehow.
+    #making a "trial"
+    
+    try:
+        trial = headers['CTYPE1']
+
+    except KeyError:
+        headers = f[1].header
+        data=f[1].data
+
     return headers,data
     
 

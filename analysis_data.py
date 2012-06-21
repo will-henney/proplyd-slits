@@ -24,9 +24,9 @@ parser.add_argument("--image","-i",default = "10_wjh_hdr.fits",type=str, help="F
 parser.add_argument("--coords","-c",default = "ODellWongTable2.fits",type=str, help="Fits table with the coordinates of the proplyds")
 parser.add_argument("--path","-p",default = "/fs/computo21/other0/jtarango/todo_python/",type=str, help="Path of fits image file")
 parser.add_argument("--path2","-q",default = "/fs/computo21/other0/jtarango/todo_python/",type=str, help="path of fits table")
-parser.add_argument("--theta", "-t", default=90.0, type=float, help="Angle of slit")
+parser.add_argument("--theta", "-t", default=90.0, type=float, help="Angle of slit (degrees)")
 parser.add_argument("--proplyd", "-P", default="168-326", type=str, help="Name of proplyd")
-
+parser.add_argument("--width","-w",default = 1.0,type = float,help = "Width of slit (Arcseconds)")
 cmdargs = parser.parse_args()
 
 Filename = cmdargs.image
@@ -84,7 +84,7 @@ THETA = np.arctan2(catalogy[Prop],catalogx[Prop]) + cmdargs.theta*np.pi/180
 #print thsLV1*180/np.pi
 
 #The time of truth...
-Ps,Br = lib.slit(data,X,Y,catalogx[Prop],catalogy[Prop],ths=THETA,delta = dx )
+Ps,Br = lib.slit(data,X,Y,catalogx[Prop],catalogy[Prop],ths=THETA,w=cmdargs.width,delta = dx )
 
 #centering to create an histogram
 
@@ -104,54 +104,11 @@ Pscen = 0.5*(Ps[1:]+Ps[:-1])
 
 outdata = open('output.dat','w')
 
-outdata.write('#Slit centered in proplyd '+ cmdargs.proplyd + ' with angle ' + str(cmdargs.theta)+'\n')
+#First lines are the Title of textfile and the labels of the axes. Use the program of your preference for graphs
+outdata.write('#Slit centered in proplyd '+ cmdargs.proplyd + ' with angle ' + str(cmdargs.theta)+'width='+str(cmdargs.width)+'\n')
 outdata.write('#Position'+'\t'+'Brightness'+'\n')
 for i in range(0,Br.size):
     outdata.write( str( Ps[i] )+'\t'+str( Br[i] )+'\n' )
 
 outdata.close()
-#repeat everything with a perpendicular slit
-#thsLV1_n = thsLV1 + 0.5*np.pi
-#print thsLV1_n*180/np.pi
 
-#PnLV1,SnLV1 = lib.slit(data,X,Y,catalogx['168-326'],catalogy['168-326'],ths = thsLV1_n,w = 2.5,delta = dx)
-#PncenLV1 = 0.5*(PnLV1[1:]+PnLV1[:-1])
-
-#plt.plot(PncenLV1,SnLV1)
-#plt.axis([-20,20,0,300]) #Adjusting axes
-#plt.xlabel('xslit(arcseconds)')
-#plt.ylabel('yslit(arcseconds)')
-#plt.title('Histograma LV1 (normal)')
-#plt.savefig('LV1n_b.png')
-#plt.clf()
-
-#Must try with LV3
-#Once being sure about the angle, let's proceed with LV3 (The slit that passes through Th1C and the normal one)
-
-#thsLV3 = np.arctan2(catalogy['163-317'],catalogx['163-317'])
-#thsLV3_n = thsLV3 + 0.5*np.pi
-
-#PLV3,SLV3 = lib.slit(data,X,Y,catalogx['163-317'],catalogy['163-317'],ths =thsLV3, w = 2.5,delta = dx)
-#PnLV3,SnLV3 = lib.slit(data,X,Y,catalogx['163-317'],catalogy['163-317'],ths =thsLV3_n, w = 2.5,delta = dx)
-
-#The plots ...
-#PcenLV3 = 0.5*(PLV3[1:]+PLV3[:-1])
-#PncenLV3 = 0.5*(PnLV3[1:]+PnLV3[:-1])
-
-#plt.plot(PcenLV3,SLV3)
-#plt.axis([-20,20,0,300]) #Adjusting axes
-#plt.xlabel('xslit(arcseconds)')
-#plt.ylabel('yslit(arcseconds)')
-#plt.title('Histograma LV3')
-#plt.savefig('LV3.png')
-#plt.clf()
-
-#plt.plot(PncenLV3,SnLV3)
-#plt.axis([-20,20,0,300]) #Adjusting axes
-#plt.xlabel('xslit(arcseconds)')
-#plt.ylabel('yslit(arcseconds)')
-#plt.title('Histograma LV3 (normal)')
-#plt.savefig('LV3n.png')
-#plt.clf()
-
-#I have to find a way to minimize this code

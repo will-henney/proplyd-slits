@@ -1,5 +1,5 @@
 import library_prop as lib
-import proplyds as prop
+#import proplyds as prop
 import pyfits
 import numpy as np
 import matplotlib.pyplot as plt
@@ -50,46 +50,19 @@ X,Y,dx,dy = lib.XY(header)
 
 #path2 = raw_input("Enter the path of the fits file from O'Dell & Wong  ")
 
-ra,dec,names = prop.ra_dec_prop(path=path2,filename=cmdargs.coords)
+#ra,dec,names = prop.ra_dec_prop(path=path2,filename=cmdargs.coords)
 
 #Fourth: Get the coordinates of my proplyds respect my XY coordinates
 #RA grows in the same direction than X and Dec in the same direction as Y
 
-xpr0,ypr0 = (ra - header['CRVAL1'])*3600.,(dec-header['CRVAL2'])*3600.
-
-#Fifth: Start to create slits. Let's create a correlation between te proplyd's name and it's positions
-#It might be a dictionary. At least for the proplyds from Bally et al. 1998
-
-#This should work
-
-catalogx = {names[s]:xpr0[s] for s in np.arange(np.size(names))}
-catalogy = {names[s]:ypr0[s] for s in np.arange(np.size(names))}
+#xpr0,ypr0 = (ra - header['CRVAL1'])*3600.,(dec-header['CRVAL2'])*3600.
 
 
-#The sintaxis to make all the slits I want:
-
-# slit1,brightness1 = slit(data,X,Y,catalogx["name of the proplyd"],catalogy["name of the proplyd"],ths=value of the angle,w = width of slit, delta = dx)   
-
-#After getting data, we should save it (in file or in a plot)
-
-#in file:
-#saving = open("output.dat","w")
-#[saving.write(slit[s],brightness[s]) for s in np.arange(size(slit))]  ? Will this work?
-#saving.close()
-
-#The other choice is to make a plot ...
-
-#Making 1st Test...
-
-#I have to choose an angle, it'll be the angular position of the proplyd ths = np.arctan2(ys,xs)
-#The test proplyd is LV1 (168-326)
 
 Xpr0_beta,Ypr0_beta = (cmdargs.propx - header['CRVAL1'])*3600.,(cmdargs.propy- header['CRVAL2'])*3600.
 
 THETA = np.arctan2(Ypr0_beta,Xpr0_beta) + cmdargs.theta*np.pi/180
 
-#thsLV1 = np.arctan2(catalogy['168-326'],catalogx['168-326'])
-#print thsLV1*180/np.pi
 
 #The time of truth...
 
@@ -114,16 +87,6 @@ plt.title('Histograma')
 plt.savefig('Grafica.png')
 plt.clf()
 
-#Well, let me try to save the Data in file.
 
-#outdata = open('output.dat','w')
-
-#First lines are the Title of textfile and the labels of the axes. Use the program of your preference for graphs
-#outdata.write('#Slit centered in proplyd '+ cmdargs.proplyd + ' with angle ' + str(cmdargs.theta)+'width='+str(cmdargs.width)+'\n')
-#outdata.write('#Position'+'\t'+'Brightness'+'\n')
-#for i in range(0,Br.size):
-#    outdata.write( str( Ps[i] )+'\t'+str( Br[i] )+'\n' )
-
-#outdata.close()
 
 
